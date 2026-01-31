@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Sonu Racing Game</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+body {
+  margin: 0;
+  background: #222;
+  font-family: Arial;
+  text-align: center;
+  color: white;
+}
+canvas {
+  background: #555;
+  display: block;
+  margin: auto;
+}
+button {
+  padding: 10px 20px;
+  font-size: 16px;
+  margin: 5px;
+}
+</style>
+</head>
+
+<body>
+
+<h2>🏁 Sonu Racing Game 🏁</h2>
+<p>Coins: <span id="coins">0</span></p>
+
+<button onclick="startGame('cycle')">🚲 Cycle</button>
+<button onclick="startGame('bike')">🏍️ Bike</button>
+<button onclick="startGame('bus')">🚌 Bus</button>
+<button onclick="startGame('van')">🚐 Van</button>
+
+<canvas id="game" width="300" height="400"></canvas>
+
+<script>
+const canvas = document.getElementById("game");
+const ctx = canvas.getContext("2d");
+
+let y = 300;
+let speed = 2;
+let coins = 0;
+let vehicle = "cycle";
+let running = false;
+
+function startGame(v) {
+  vehicle = v;
+  y = 300;
+  coins = 0;
+  running = true;
+  document.getElementById("coins").innerText = coins;
+}
+
+function drawRoad() {
+  ctx.fillStyle = "#444";
+  ctx.fillRect(0, 0, 300, 400);
+  ctx.strokeStyle = "white";
+  ctx.setLineDash([10, 10]);
+  ctx.beginPath();
+  ctx.moveTo(150, 0);
+  ctx.lineTo(150, 400);
+  ctx.stroke();
+}
+
+function drawVehicle() {
+  ctx.fillStyle = "yellow";
+  ctx.fillRect(135, y, 30, 50);
+  ctx.fillStyle = "black";
+  ctx.fillText(vehicle, 120, y - 5);
+}
+
+function gameLoop() {
+  if (!running) return;
+
+  ctx.clearRect(0, 0, 300, 400);
+  drawRoad();
+  drawVehicle();
+
+  y -= speed;
+  coins++;
+
+  document.getElementById("coins").innerText = coins;
+
+  if (y < -50) {
+    running = false;
+    alert("🏆 Winner! Coins: " + coins);
+  }
+
+  requestAnimationFrame(gameLoop);
+}
+
+setInterval(() => {
+  if (running) gameLoop();
+}, 50);
+</script>
+
+</body>
+</html>
